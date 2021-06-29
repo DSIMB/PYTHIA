@@ -64,7 +64,7 @@ If you don't have a sequence database follow the steps explained on HHblits [ext
 You can download the latest build of Medusa docker image (recommended):  
 
 ```
-$ docker pull dsimb/PYTHIA
+$ docker pull dsimb/pythia
 ```
 
 or build it yourself from the git repository:  
