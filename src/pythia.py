@@ -143,3 +143,28 @@ zippedList =  list(zip(seq_AA,
 df = pd.DataFrame(zippedList, columns = ["Residue", "Predicted_PB", "P_max", "P_a", "P_b", "P_c", "P_d", "P_e", "P_f", "P_g", "P_h", "P_i", "P_j", "P_k", "P_l", "P_m", "P_n", "P_o", "P_p"])
 df.to_csv(os.path.join(PATH_OUTPUT, "PB_prediction.csv"), index=False, float_format="%.2f", sep="\t")
 
+# Write the PB sequence as fasta output
+with open(PATH_FASTA) as f:
+    seq_id = f.readline().strip()
+seq = "".join([pb for pb in y_pred_pb])
+with open(os.path.join(PATH_OUTPUT, "predicted_PB.fasta"), "w") as f:
+    f.write(f"{seq_id}\n{seq}")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
