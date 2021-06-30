@@ -1,0 +1,84 @@
+- 13:41:16.976 INFO: Searching 10381269 column state sequences.
+
+- 13:41:17.058 INFO: /tmp/seq.fasta is in A2M, A3M or FASTA format
+
+- 13:41:17.058 INFO: Iteration 1
+
+- 13:41:17.142 INFO: Prefiltering database
+
+- 13:41:31.112 INFO: HMMs passed 1st prefilter (gapless profile-profile alignment)  : 119425
+
+- 13:41:31.562 INFO: HMMs passed 2nd prefilter (gapped profile-profile alignment)   : 100
+
+- 13:41:31.562 INFO: HMMs passed 2nd prefilter and not found in previous iterations : 100
+
+- 13:41:31.562 INFO: Scoring 100 HMMs using HMM-HMM Viterbi alignment
+
+- 13:41:32.432 INFO: Alternative alignment: 0
+
+- 13:41:32.486 INFO: 100 alignments done
+
+- 13:41:32.487 INFO: Alternative alignment: 1
+
+- 13:41:32.529 INFO: 100 alignments done
+
+- 13:41:32.530 INFO: Alternative alignment: 2
+
+- 13:41:32.544 INFO: 1 alignments done
+
+- 13:41:32.545 INFO: Alternative alignment: 3
+
+- 13:41:32.942 INFO: Realigning 62 HMM-HMM alignments using Maximum Accuracy algorithm
+
+- 13:41:33.203 INFO: 1 sequences belonging to 1 database HMMs found with an E-value < 0.0001
+
+- 13:41:33.203 INFO: Number of effective sequences of resulting query HMM: Neff = 2.94892
+
+- 13:41:33.214 INFO: Iteration 2
+
+- 13:41:33.294 INFO: Prefiltering database
+
+- 13:41:46.996 INFO: HMMs passed 1st prefilter (gapless profile-profile alignment)  : 154174
+
+- 13:41:47.470 INFO: HMMs passed 2nd prefilter (gapped profile-profile alignment)   : 100
+
+- 13:41:47.470 INFO: HMMs passed 2nd prefilter and not found in previous iterations : 99
+
+- 13:41:47.470 INFO: Scoring 99 HMMs using HMM-HMM Viterbi alignment
+
+- 13:41:48.132 INFO: Alternative alignment: 0
+
+- 13:41:48.180 INFO: 99 alignments done
+
+- 13:41:48.180 INFO: Alternative alignment: 1
+
+- 13:41:48.210 INFO: 86 alignments done
+
+- 13:41:48.211 INFO: Alternative alignment: 2
+
+- 13:41:48.235 INFO: 3 alignments done
+
+- 13:41:48.235 INFO: Alternative alignment: 3
+
+- 13:41:48.628 INFO: No new hits found in iteration 2 => Stop searching
+
+- 13:41:48.628 INFO: Rescoring previously found HMMs with Viterbi algorithm
+
+- 13:41:49.111 INFO: Alternative alignment: 0
+
+- 13:41:49.126 INFO: 1 alignments done
+
+- 13:41:49.126 INFO: Alternative alignment: 1
+
+- 13:41:49.141 INFO: 1 alignments done
+
+- 13:41:49.141 INFO: Alternative alignment: 2
+
+- 13:41:49.141 INFO: Alternative alignment: 3
+
+- 13:41:49.551 INFO: Realigning 44 HMM-HMM alignments using Maximum Accuracy algorithm
+
+- 13:41:49.852 INFO: 1 sequences belonging to 1 database HMMs found with an E-value < 0.0001
+
+- 13:41:49.852 INFO: Number of effective sequences of resulting query HMM: Neff = 2.94892
+
