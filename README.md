@@ -83,12 +83,16 @@ $ docker build -t dsimb/pythia .
 | -v     | $(pwd)                                            | : | /project      |
 
 
+#### 1 - Set paths
 ```term
 # Change paths and names accordingly
 PATH_DATABASE=/path/to/database
 # Path to PYTHIA git repository
-PATH_PYTHIA=$(pwd) 
+PATH_PYTHIA=$(pwd)  
+```
 
+#### 2 - Run docker image  
+```
 $ docker run -it --rm \
     # Launch docker as user's id
     --user "$(id -u):$(id -g)" \  
@@ -107,7 +111,7 @@ $ docker run -it --rm \
     # Directory which will contain results (path relative to project)
     -o ./results  
 ```
-One-liner, for convenience
+Or, this one-liner, for convenience
 ```term
 $ docker run -it --user "$(id -u):$(id -g)" -v ${PATH_DATABASE}:/database:ro -v ${PATH_PYTHIA}:/project dsimb/pythia -i ./data/sequence.fasta -d uniclust30_2016_09 -l balanced -o ./results
 ```
