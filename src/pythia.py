@@ -111,7 +111,7 @@ model.compile(loss='categorical_crossentropy', optimizer=Adam(lr=lr_schedule(0))
 input_features = np.loadtxt(PATH_MERGE)
 input_features = np.reshape(input_features, (len(input_features), ROWS, COLS))
 
-#Load fasta file
+# Load fasta file
 seq = np.loadtxt(PATH_FASTA, dtype="str", skiprows=1)
 seq_AA = seq.tolist()
 
@@ -119,6 +119,16 @@ y_pred = model.predict(input_features, verbose=0)
 y_pred_classes = np.argmax(y_pred, axis=1)
 y_pred_pb = CLASS_TO_PB[y_pred_classes]
 prob_y_pred = np.amax(y_pred, axis=1)
+
+# First 2 and last 2 PBs cannot be predicted
+# because of definition of Protein Blocks
+# So we set 'ZZ...ZZ' extremities
+np.put(y_pred_pb, [0, 1, -2, -1], ["Z", "Z", "Z", "Z"])
+np.put(prob_y_pred, [0, 1, -2, -1], [0, 0, 0, 0])
+y_pred[0, :] = 0
+y_pred[1, :] = 0
+y_pred[-2, :] = 0
+y_pred[-1, :] = 0
 
 # Create a dataframe from zipped list
 zippedList =  list(zip(seq_AA, 
@@ -143,10 +153,12 @@ zippedList =  list(zip(seq_AA,
 df = pd.DataFrame(zippedList, columns = ["Residue", "Predicted_PB", "P_max", "P_a", "P_b", "P_c", "P_d", "P_e", "P_f", "P_g", "P_h", "P_i", "P_j", "P_k", "P_l", "P_m", "P_n", "P_o", "P_p"])
 df.to_csv(os.path.join(PATH_OUTPUT, "PB_prediction.csv"), index=False, float_format="%.2f", sep="\t")
 
-# Write the PB sequence as fasta output
+# Get seq id from input fasta
 with open(PATH_FASTA) as f:
     seq_id = f.readline().strip()
+# Concatenate the predicted Protein Blocks
 seq = "".join([pb for pb in y_pred_pb])
+# Write the PB sequence as fasta output
 with open(os.path.join(PATH_OUTPUT, "predicted_PB.fasta"), "w") as f:
     f.write(f"{seq_id}\n{seq}")
 
