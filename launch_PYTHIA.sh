@@ -1,5 +1,7 @@
 #! /bin/bash
 
+start=`date +%s`
+
 # Show this for help
 usage() {
 cat << EOF
@@ -267,3 +269,6 @@ cp $OUTDIR/job* $OUTDIR/log_hhblits $OUTDIR/logs/
 tar -czf $OUTDIR/pythia_job\_results.tar.gz $OUTDIR/prediction/*.csv $OUTDIR/prediction/*.fasta $OUTDIR/logs 1>/dev/null 2>&1
 rm $OUTDIR/job* $OUTDIR/log_hhblits
 printf "Results can be found in $ORIGINAL_OUTDIR_NAME\n\n"
+end=`date +%s`
+runtime=$((end-start))
+printf "Total runtime: $runtime seconds\n\n"
