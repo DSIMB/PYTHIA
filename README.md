@@ -70,7 +70,7 @@ $ docker pull dsimb/pythia
 or build it yourself from the git repository:  
 
 ```
-$ docker build -t pythia .
+$ docker build -t dsimb/pythia .
 ```
 
 ### Run the Docker container  
@@ -97,7 +97,7 @@ $ docker run -it --rm \
     # Bind mount the project's folder
     -v ${PATH_PYTHIA}:/project \  
     # The name of the container we launch
-    pythia \  
+    dsimb/pythia \  
     # Fasta file containing the target sequence (path relative to project)
     -i ./data/sequence.fasta \  
     # Name of the database prefix for HHblits (c.f --help for more details)
@@ -109,7 +109,7 @@ $ docker run -it --rm \
 ```
 One-liner, for convenience
 ```term
-$ docker run -it --user "$(id -u):$(id -g)" -v ${PATH_DATABASE}:/database:ro -v ${PATH_PYTHIA}:/project pythia -i ./data/sequence.fasta -d uniclust30_2016_09 -l balanced -o ./results
+$ docker run -it --user "$(id -u):$(id -g)" -v ${PATH_DATABASE}:/database:ro -v ${PATH_PYTHIA}:/project dsimb/pythia -i ./data/sequence.fasta -d uniclust30_2016_09 -l balanced -o ./results
 ```
 
 ### Example for running batch prediction  
@@ -131,7 +131,7 @@ SATVSEINSETDFVAKNDQFIALTKDTTAHIQSNSLQSVEELHSSTINGVKFEEYLKSQI
 ATIGENLVVRRFATLKAGANGVVNGYIHTNGRVGVVIAAACDSAEVASKSRDLLRQICMH
 $ awk '/^>/{s=++d".fasta"} {print > s}' multi.fasta
 1.fasta 2.fasta
-$ for seq in ./*.fasta; do docker run -it --user "$(id -u):$(id -g)" -v ${PATH_DATABASE}:/database:ro -v ${PATH_PYTHIA}:/project pythia -i ./$seq -d uniclust30_2016_09 -l balanced -o ./results -c 0 -o 0; done
+$ for seq in ./*.fasta; do docker run -it --user "$(id -u):$(id -g)" -v ${PATH_DATABASE}:/database:ro -v ${PATH_PYTHIA}:/project dsimb/pythia -i ./$seq -d uniclust30_2016_09 -l balanced -o ./results -c 0 -o 0; done
 ```
 
 
