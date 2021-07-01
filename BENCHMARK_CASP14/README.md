@@ -1,4 +1,4 @@
-# Launch benchmarking of PYTHIA on CASP 14 targets
+# Benchmarking of PYTHIA on CASP 14 targets
 
 ```
 $ ./pythia_accuracy_casp14_targets.py
