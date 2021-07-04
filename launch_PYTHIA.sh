@@ -238,7 +238,7 @@ printf "done\n"
 
 printf "Create AAindex and one-hot encodings ... "
 ### Step 2. Create aaindex data.
-$SCRIPTS/fasta2vector_wgap $SEQ $DATA/selected_aaindex1_reformated_58_Van_Westen > $OUTDIR/job.aaindex
+$SCRIPTS/fasta2vector_wgap.pl $SEQ $DATA/selected_aaindex1_reformated_58_Van_Westen > $OUTDIR/job.aaindex
 
 ### Step 3. Create one-hot data.
 $SCRIPTS/seq2onehot.pl $SEQ AA >> $OUTDIR/job.onehot
