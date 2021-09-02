@@ -16,6 +16,12 @@ from tensorflow.keras.models import model_from_json
 from tensorflow.keras.utils import get_custom_objects
 from tensorflow.keras.layers import Activation
 from tensorflow.keras.optimizers import Adam
+from tensorflow.compat.v1 import ConfigProto
+from tensorflow.compat.v1 import InteractiveSession
+
+config = ConfigProto()
+config.gpu_options.allow_growth = True
+session = InteractiveSession(config=config)
 
 # Parse arguments
 parser = argparse.ArgumentParser()
