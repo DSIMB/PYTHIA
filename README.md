@@ -116,6 +116,27 @@ Or, this one-liner, for convenience
 $ docker run -it --user "$(id -u):$(id -g)" -v ${PATH_DATABASE}:/database:ro -v ${PATH_PYTHIA}:/project dsimb/pythia -i ./data/sequence.fasta -d uniclust30_2016_09 -l balanced -o ./results
 ```
 
+### 2. Install Conda environment
+
+Alternatively to Docker, you can run PYTHIA inside a conda environment.  
+To create the environment:  
+```
+$ conda env create -f environment.yaml
+$ conda activate pythia
+```  
+
+Now you can launch PYTHIA:  
+```
+./launch_PYTHIA.sh -i ./data/T1027-D1.fasta -d /path/to/database/uniclust30_2016_09 -l balanced -o ./results -c 0 -m 0
+```  
+
+#### **ATTENTION**  
+
+Please note that the option -d value depends on the way you launch PYTHIA:  
+- With Docker: provide only the name of the database, ex: uniclust30_2016_09  
+- With Conda: provide the absolute path to the database with the name, ex: /home/gabriel/databases/UNICLUST/uniclust30_2016_09  
+
+
 ### Example for running batch prediction  
 
 If you have a multifasta file and you wish to run PYTHIA protein flexibility prediction for all of your sequences,
@@ -137,6 +158,8 @@ $ awk '/^>/{s=++d".fasta"} {print > s}' multi.fasta
 1.fasta 2.fasta
 $ for seq in ./*.fasta; do docker run -it --user "$(id -u):$(id -g)" -v ${PATH_DATABASE}:/database:ro -v ${PATH_PYTHIA}:/project dsimb/pythia -i ./$seq -d uniclust30_2016_09 -l balanced -o ./results -c 0 -o 0; done
 ```
+
+
 
 
 ### Help
