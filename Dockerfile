@@ -1,5 +1,5 @@
 # Set base image
-FROM tensorflow/tensorflow:2.3.0
+FROM tensorflow/tensorflow:2.1.0-py3
 
 LABEL program="PYTHIA"
 LABEL description="A Deep Learning based Protein Blocks prediction tool."
