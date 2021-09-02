@@ -11,14 +11,16 @@ Usage:
         -d    | --database    (Required)     Name of the database for HHBlits.
                                              Ex: UniRef30_2020_06
                                              If your path is '/path/to/Uniclust/UniRef30_2020_03_a3m.ffdata'
-                                             please provide: -d UniRef30_2020_03
+					     If launching with Docker:
+                                             	please provide: -d UniRef30_2020_03
+					     If launching with Conda:
+						please provide: -d /path/to/Uniclust/UniRef30_2020_03
         -o    | --outdir      (Required)     Path to the output directory.
-        -c    | --cpus        (Optionnal)    Number of CPUs to use (for HHblits). Default is 2. Set to 0 for all available memory.
-        -m    | --memory      (Optionnal)    Maximum RAM to use in Gb (for HHblits). Default is 3. Set to 0 for all.
+        -c    | --cpus        (Optionnal)    Number of CPUs to use (for HHblits). Set to 0 for all available memory. Default is 0.
+        -m    | --memory      (Optionnal)    Maximum RAM to use in Gb (for HHblits) Set to 0 for all. Default is 0.
         -h    | --help        (Optionnal)    Brings up this help
 EOF
 }
-
 
 
 # Detect maximum hardware ressources based on OS
@@ -74,14 +76,26 @@ while [ "$1" != "" ]; do
     shift
 done
 
+
+# Check if we are living in Docker container or not
+if grep -q docker /proc/1/cgroup; then
+    PROJECT_DIR=/project
+    DATABASE_DIR=/database
+else
+    PROJECT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+    DATABASE_DIR=$(dirname -- $DATABASE)
+    DATABASE=$(basename -- $DATABASE)
+fi
+
+
 # Check for valid sequence input
-if [ ! -f /project/$SEQ ]; then
+if [ ! -f $PROJECT_DIR/$SEQ ]; then
     printf "\nA valid input sequence file is required, provide it with the flag: -i sequence.fasta\nMake sure the path to the file is relative to your project folder.\n\n"
     exit
-elif [ $(grep -c "^>" /project/$SEQ) -gt 1 ]; then
+elif [ $(grep -c "^>" $PROJECT_DIR/$SEQ) -gt 1 ]; then
     printf "\nPlease provide only one FASTA sequence.\n\n"
     exit
-elif [ $(grep -c "^>" /project/$SEQ) -eq 0 ]; then
+elif [ $(grep -c "^>" $PROJECT_DIR/$SEQ) -eq 0 ]; then
     printf "\nPlease provide at least one FASTA sequence.\n\n"
     exit
 fi
@@ -89,9 +103,9 @@ fi
 
 TMP_SEQ=/tmp/seq.fasta
 # Convert multiline fasta to single line
-sed ':a;N;/^>/M!s/\n//;ta;P;D' < /project/$SEQ > $TMP_SEQ
+sed ':a;N;/^>/M!s/\n//;ta;P;D' < $PROJECT_DIR/$SEQ > $TMP_SEQ
 # Extract only sequence without header (and trim whitespaces on extremities)
-SEQ=$(sed ':a;N;/^>/M!s/\n//;ta;P;D' < /project/$SEQ | tail -1 | xargs)
+SEQ=$(sed ':a;N;/^>/M!s/\n//;ta;P;D' < $PROJECT_DIR/$SEQ | tail -1 | xargs)
 printf "\nInput sequence:\n$SEQ\n\n"
 # Check if sequence contains whitespaces
 if [[ $SEQ =~ .*[[:space:]]+.* ]]; then
@@ -112,14 +126,14 @@ elif [[ $SEQ =~ ^[atgcATGC]+$ ]]; then
 fi
 
 # Check if database is accessible
-if [ ! -f /database/$DATABASE"_a3m.ffindex" ]; then
-    printf "\nThe database $DATABASE seem unusable, please link the right database."
-    printf "\nIf your path is '/path/to/database/UniRef30_2020_03_a3m.ffdata' provide: -d UniRef30_2020_03\n\n"
+if [ ! -f $DATABASE_DIR/$DATABASE"_a3m.ffindex" ]; then
+    printf "\nThe database $DATABASE_DIR/$DATABASE seem unusable, please link the right database."
+    printf "\nIf your path is '/path/to/database/UniRef30_2020_03_a3m.ffdata' provide: -d UniRef30_2020_03 when using Docker, or -d /path/to/database/UniRef30_2020_03 when using Conda.\n\n"
     exit
 fi
 
 # Check if the output directory exists
-if [ ! -d /project/$OUTDIR ]; then
+if [ ! -d $PROJECT_DIR/$OUTDIR ]; then
     printf "\n$OUTDIR does not exist, please provide a right output directory.\n\n"
     exit
 fi
@@ -188,20 +202,20 @@ then
 fi
 
 # Create a directory for the job output
-JOBDIR=$(mktemp -d -t PYTHIA.XXXX --suffix=-$(date +%Y%m%d%H%M%S) -p /project/$OUTDIR)
+JOBDIR=$(mktemp -d -t PYTHIA.XXXX --suffix=-$(date +%Y%m%d%H%M%S) -p $PROJECT_DIR/$OUTDIR)
 ORIGINAL_OUTDIR_NAME=$OUTDIR/`basename $JOBDIR`
 
 # Set global paths
 
 # The project is mounted as docker bind volume
-# into /project directory in the docker container
-PROJECT=/project
+# into $PROJECT_DIR directory in the docker container
+PROJECT=$PROJECT_DIR
 HHSUITE=$PROJECT/bin/hh-suite
 HHBLITS=$HHSUITE/bin/hhblits
 HHFILTER=$HHSUITE/bin/hhfilter
 # path to database is a mounted volume to /database in Docker image env
 # the name of the database is given in command line argument
-DBHHBLITS=/database/$DATABASE
+DBHHBLITS=$DATABASE_DIR/$DATABASE
 OUTDIR=$JOBDIR
 SEQ=$TMP_SEQ
 SCRIPTS=$PROJECT/src
@@ -219,7 +233,7 @@ WINDOW=61
 ### Step 1. Create pssm data.
 ### HHblits is time consuming, probably remove the -realign_old_hits option. Probably decrease -max_filt and -realign_max.
 printf "Run HHblits ... "
-$HHBLITS -cpu $CPUS -maxmem $MEMORY -maxfilt 10000 -diff inf -B 10000 -Z 10000 -e 0.0001 -cov 75 -realign_old_hits -realign_max 10000 -n 3 -i $SEQ -d $DBHHBLITS -oa3m $OUTDIR/job.a3m -o $OUTDIR/job.hhr 1>/dev/null 2> $OUTDIR/log_hhblits
+$HHBLITS -cpu $CPUS -maxmem $MEMORY -maxfilt 10000 -diff inf -B 10000 -Z 10000 -e 0.0001 -cov 75 -realign_old_hits -realign_max 10000 -n 3 -i $SEQ -d $DBHHBLITS -oa3m $OUTDIR/job.a3m -o $OUTDIR/job.hhr 1>/dev/null 2> $OUTDIR/hhblits.log
 printf "done\n"
 
 printf "Run HHfilter ... "
@@ -260,15 +274,16 @@ printf "done\n"
 ### Step 6. Make prediction
 # Activate Tensorflow conda environment to run the script
 printf "Run prediction ... "
-$SCRIPTS/pythia.py -m $OUTDIR/job.merged -o $OUTDIR/prediction -f $SEQ -mjson $MODEL_ARCH -mh5 $MODEL_WEIGHTS 1>/dev/null 2>/dev/null
+$SCRIPTS/pythia.py -m $OUTDIR/job.merged -o $OUTDIR/prediction -f $SEQ -mjson $MODEL_ARCH -mh5 $MODEL_WEIGHTS 1>$OUTDIR/predictions.log 2>&1
 printf "done\n\n"
 
 # Create downloadable tar.gz
 mkdir $OUTDIR/logs
-cp $OUTDIR/job* $OUTDIR/log_hhblits $OUTDIR/logs/
+cp $OUTDIR/job* $OUTDIR/*.log $OUTDIR/logs/
 tar -czf $OUTDIR/pythia_job\_results.tar.gz $OUTDIR/prediction/*.csv $OUTDIR/prediction/*.fasta $OUTDIR/logs 1>/dev/null 2>&1
-rm $OUTDIR/job* $OUTDIR/log_hhblits
+rm $OUTDIR/job* $OUTDIR/*.log
 printf "Results can be found in $ORIGINAL_OUTDIR_NAME\n\n"
 end=`date +%s`
 runtime=$((end-start))
 printf "Total runtime: $runtime seconds\n\n"
+
