@@ -2,7 +2,8 @@
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/dsimb/pythia.svg)](https://hub.docker.com/r/dsimb/pythia)
 
-(C) Gabriel Cretin, Tatiana Galochkina, Alexandre de Brevern, Jean-Christophe Gelly
+(C) Gabriel Cretin, Tatiana Galochkina, Alexandre de Brevern, Jean-Christophe Gelly  
+https://doi.org/10.3390/ijms22168831
 
 **Deep Learning Approach For Local Protein Conformation Prediction**
 
@@ -203,7 +204,7 @@ logs  pythia_job_results.tar.gz  prediction
 
 ### Reference  
 
-Comming soon
+Gabriel Cretin, Tatiana Galochkina, Alexandre G. de Brevern, and Jean-Christophe Gelly. 2021. "PYTHIA: Deep Learning Approach for Local Protein Conformation Prediction" International Journal of Molecular Sciences 22, no. 16: 8831. https://doi.org/10.3390/ijms22168831
 
 ### Issues  
 
