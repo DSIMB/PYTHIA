@@ -1,5 +1,6 @@
 # PYTHIA
 
+[![DOI](https://zenodo.org/badge/381299731.svg)](https://zenodo.org/badge/latestdoi/381299731)
 [![Docker Pulls](https://img.shields.io/docker/pulls/dsimb/pythia.svg)](https://hub.docker.com/r/dsimb/pythia)
 
 (C) Gabriel Cretin, Tatiana Galochkina, Alexandre de Brevern, Jean-Christophe Gelly  
