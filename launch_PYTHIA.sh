@@ -29,8 +29,8 @@ MAX_CPUS=$(getconf _NPROCESSORS_ONLN)
 AVAIL_MEMORY=$(awk '/MemFree/ { printf "%.0f \n", $2/1024/1024 }' /proc/meminfo)
 
 # Set default resources based on HHblits defaults
-CPUS=2
-MEMORY=3
+CPUS=0
+MEMORY=0
 
 
 # Parse command line arguments
