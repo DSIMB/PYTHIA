@@ -26,7 +26,7 @@ EOF
 # Detect maximum hardware ressources based on OS
 MAX_CPUS=$(getconf _NPROCESSORS_ONLN)
 # get available memory (inactive RAM) in GB
-AVAIL_MEMORY=$(awk '/MemFree/ { printf "%.0f \n", $2/1024/1024 }' /proc/meminfo)
+AVAIL_MEMORY=$(awk '/MemTotal/ { printf "%.0f \n", $2/1024/1024 }' /proc/meminfo)
 
 # Set default resources based on HHblits defaults
 CPUS=0
@@ -78,7 +78,7 @@ done
 
 
 # Check if we are living in Docker container or not
-if grep -q docker /proc/1/cgroup; then
+if [ -f /.dockerenv ]; then
     PROJECT_DIR=/project
     DATABASE_DIR=/database
 else
@@ -86,7 +86,6 @@ else
     DATABASE_DIR=$(dirname -- $DATABASE)
     DATABASE=$(basename -- $DATABASE)
 fi
-
 
 # Check for valid sequence input
 if [ ! -f $PROJECT_DIR/$SEQ ]; then
