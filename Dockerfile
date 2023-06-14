@@ -1,9 +1,9 @@
 # Set base image
-FROM tensorflow/tensorflow:2.1.0-py3
+FROM tensorflow/tensorflow:2.1.0
 
 LABEL program="PYTHIA"
 LABEL description="A Deep Learning based Protein Blocks prediction tool."
-LABEL version="1.0"
+LABEL version="1.2"
 LABEL maintainer="gabriel.cretin@u-paris.fr"
 
 # Set the working directory in the container
